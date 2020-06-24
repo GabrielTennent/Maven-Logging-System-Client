@@ -4,7 +4,10 @@ import com.sun.javafx.util.Logging;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
@@ -17,39 +20,41 @@ import java.util.List;
 
 public class Resthome4LogsAppender extends AppenderSkeleton{
 
-    private URIBuilder logServiceURL = new URIBuilder();
+    private static final String logServiceURL = "http://localhost:8080/resthome4logs/logs";
+    private static final String SCHEME = "http";
+    private static final String HOST = "localhost";
+    private static final String PATH = "resthome4logs/logs";
+    private static final int PORT = 8080;
+    private URIBuilder builder = new URIBuilder();
 
-    public static void main(String [] args) throws Exception{
-        Resthome4LogsAppender logger = new Resthome4LogsAppender();
-
-        //LoggingEvent log = new LoggingEvent();
-    }
 
     public Resthome4LogsAppender() {
-        this.logServiceURL.setScheme("http")
-                .setHost("localhost")
-                .setPath("resthome4logs/logs")
-                .setPort(8080)
-                .setParameter("number", "3");
 
-
+        builder.setScheme(SCHEME)
+                .setHost(HOST)
+                .setPath(PATH)
+                .setPort(PORT);
     }
 
     @Override
     protected void append(LoggingEvent loggingEvent) {
         try {
-            URI uri = logServiceURL.build();
-
-            // create and execute the request
+            URI uri = builder.build();
             HttpClient httpClient = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(uri);
             HttpResponse response = httpClient.execute(request);
             assert response.getStatusLine().getStatusCode() == 200;
+            HttpPost post = new HttpPost(uri);
+
+            JSONLayout jsonLayout = new JSONLayout();
+            String string = jsonLayout.format(loggingEvent);
+            StringEntity requestEntity = new StringEntity(string, ContentType.APPLICATION_JSON);
+            post.setEntity(requestEntity);
+            HttpResponse rawResponse = httpClient.execute(post);
         } catch (Exception x){
             x.printStackTrace();
             return;
         }
-        //Uses do post to store on the server
     }
 
     @Override

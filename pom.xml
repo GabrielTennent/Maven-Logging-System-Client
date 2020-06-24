@@ -4,7 +4,7 @@
   <groupId>assignment2</groupId>
   <artifactId>a2-Client</artifactId>
   <packaging>war</packaging>
-  <version>v2.0.0</version>
+  <version>v2.0.2</version>
   <name>a2-Client</name>
   <url>http://maven.apache.org</url>
   <properties>
@@ -42,6 +42,12 @@
       <version>4.5.12</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client -->
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client</artifactId>
+      <version>1.35.0</version>
+    </dependency>
   </dependencies>
   <build>
     <extensions>
