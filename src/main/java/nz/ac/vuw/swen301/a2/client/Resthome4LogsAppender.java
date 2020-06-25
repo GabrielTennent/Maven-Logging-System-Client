@@ -1,6 +1,7 @@
 package nz.ac.vuw.swen301.a2.client;
 
 import com.sun.javafx.util.Logging;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -55,6 +56,20 @@ public class Resthome4LogsAppender extends AppenderSkeleton{
             x.printStackTrace();
             return;
         }
+    }
+
+    public String[][] retrieve(String level, int limit) throws URISyntaxException, IOException {
+        URI uri = builder.build();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(uri);
+        HttpResponse response = httpClient.execute(request);
+        assert response.getStatusLine().getStatusCode() == 200;
+        HttpPost post = new HttpPost(uri);
+        //request.setHeader("level", level);
+        //request.setHeader("limit", limit);
+
+
+        return null;
     }
 
     @Override
