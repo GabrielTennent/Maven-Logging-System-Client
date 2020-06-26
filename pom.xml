@@ -4,7 +4,7 @@
   <groupId>assignment2</groupId>
   <artifactId>a2-Client</artifactId>
   <packaging>war</packaging>
-  <version>v2.0.2</version>
+  <version>v2.0.4</version>
   <name>a2-Client</name>
   <url>http://maven.apache.org</url>
   <properties>
